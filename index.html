@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strategic Materials & AI Magnetics Twin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#f0fdf4', 500: '#10b981', 600: '#059669', 700: '#047857' },
+            slate: { 850: '#111827', 900: '#0f172a', 950: '#020617' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background-color: #0b0f19; color: #f3f4f6; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- Navigation Bar -->
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center font-bold text-white shadow-lg shadow-emerald-500/20">
+          🧲
+        </div>
+        <div>
+          <h1 class="font-bold text-base md:text-lg tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
+            AETHER-REE // Strategic Materials AI
+          </h1>
+          <p class="text-xs text-slate-400">Critical Minerals Simulation & Digital Twin Suite</p>
+        </div>
+      </div>
+
+      <!-- Live Status & Mode -->
+      <div class="flex items-center gap-4 text-xs">
+        <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span class="text-slate-300 font-mono">TWIN AGENT: <span id="agentStatusText" class="text-emerald-400">ACTIVE</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="max-w-7xl mx-auto px-4 flex gap-1 overflow-x-auto custom-scrollbar border-t border-slate-800/80 text-xs font-medium pt-1">
+      <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-4 py-2 border-b-2 border-emerald-500 text-emerald-400 flex items-center gap-2 whitespace-nowrap">
+        📊 Overview & Matrix
+      </button>
+      <button onclick="switchTab('material')" id="tab-material" class="tab-btn px-4 py-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 whitespace-nowrap">
+        🧪 AI Magnet Designer
+      </button>
+      <button onclick="switchTab('hydromet')" id="tab-hydromet" class="tab-btn px-4 py-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 whitespace-nowrap">
+        ⚙️ Hydromet Cascade Twin
+      </button>
+
+      <button onclick="switchTab('ewaste')" id="tab-ewaste" class="tab-btn px-4 py-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 whitespace-nowrap">
+        🤖 E-Waste Vision Sorting
+      </button>
+
+      <button onclick="switchTab('supply')" id="tab-supply" class="tab-btn px-4 py-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 whitespace-nowrap">
+        🌐 Supply Chain Engine
+      </button>
+      <button onclick="switchTab('gemini')" id="tab-gemini" class="tab-btn px-4 py-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 whitespace-nowrap">
+        ✨ Gemini AI Advisor
+      </button>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full">
+
+    <!-- 1. DASHBOARD & MATRIX -->
+    <div id="view-dashboard" class="tab-content space-y-6">
+      <!-- KPI Header -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm">
+          <span class="text-xs text-slate-400 uppercase font-semibold">Critical Mineral Risk</span>
+          <div class="text-2xl font-bold text-amber-400 mt-1 font-mono">HIGH (78.4)</div>
+          <p class="text-xs text-slate-500 mt-1">Nd, Dy, Tb bottleneck</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm">
+          <span class="text-xs text-slate-400 uppercase font-semibold">Recycled Magnet Supply</span>
+          <div class="text-2xl font-bold text-emerald-400 mt-1 font-mono">34.2%</div>
+          <p class="text-xs text-slate-500 mt-1">+4.8% from CV sorting</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm">
+          <span class="text-xs text-slate-400 uppercase font-semibold">Twin Extraction Efficiency</span>
+          <div class="text-2xl font-bold text-cyan-400 mt-1 font-mono">92.8%</div>
+          <p class="text-xs text-slate-500 mt-1">RL Agent auto-optimized</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm">
+          <span class="text-xs text-slate-400 uppercase font-semibold">Strategic Buffer Reserve</span>
+          <div class="text-2xl font-bold text-indigo-400 mt-1 font-mono">68 Days</div>
+          <p class="text-xs text-slate-500 mt-1">Automotive & Defense pool</p>
+        </div>
+      </div>
+
+      <!-- Matrix Table & Search -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h3 class="font-bold text-base text-slate-100">Systemic Material Impact Matrix</h3>
+            <p class="text-xs text-slate-400">Live monitoring of strategic rare earths and substitution feasibility</p>
+          </div>
+          <input id="matrixSearch" type="text" onkeyup="filterMatrix()" placeholder="Filter materials (e.g. Nd, Dy, FeN)..." 
+                 class="bg-slate-950 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 w-full md:w-64">
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider">
+              <tr>
+                <th class="p-3">Material</th>
+                <th class="p-3">Primary Application</th>
+                <th class="p-3">Supply Risk</th>
+                <th class="p-3">ESG Waste Impact</th>
+                <th class="p-3">AI Substitute Status</th>
+                <th class="p-3">Domestic Readiness</th>
+              </tr>
+            </thead>
+            <tbody id="matrixTable" class="divide-y divide-slate-800 font-mono">
+              <!-- JS Populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. AI MATERIAL DISCOVERY & MAGNET DESIGNER -->
+    <div id="view-material" class="tab-content hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-5">
+        <div>
+          <h3 class="font-bold text-base text-slate-100">Target Magnetic Property Controls</h3>
+          <p class="text-xs text-slate-400">Synthesize alternative magnet compositions matching targets</p>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-slate-300">Remanence / Flux ($B_r$):</span>
+            <span id="val-flux" class="font-mono text-emerald-400">1.35 Tesla</span>
+          </div>
+          <input type="range" min="0.5" max="2.0" step="0.05" value="1.35" id="slider-flux" oninput="updateMagnetDesign()" class="w-full accent-emerald-500">
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-slate-300">Coercivity ($H_{cj}$):</span>
+            <span id="val-coercivity" class="font-mono text-emerald-400">1800 kA/m</span>
+          </div>
+          <input type="range" min="500" max="3000" step="50" value="1800" id="slider-coercivity" oninput="updateMagnetDesign()" class="w-full accent-emerald-500">
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-slate-300">Max Temp Resistance ($T_{max}$):</span>
+            <span id="val-temp" class="font-mono text-emerald-400">180 °C</span>
+          </div>
+          <input type="range" min="80" max="350" step="10" value="180" id="slider-temp" oninput="updateMagnetDesign()" class="w-full accent-emerald-500">
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+          <span class="text-xs font-semibold text-slate-400 uppercase">AI Recommended Alloy Synthesis</span>
+          <div id="alloyResult" class="text-lg font-bold font-mono text-cyan-400">Synthesizing...</div>
+          <p id="alloyDesc" class="text-xs text-slate-400">Adjust parameters to trigger formula generator.</p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
+        <div>
+          <h3 class="font-bold text-base text-slate-100 mb-2">Performance Radar Comparison</h3>
+          <p class="text-xs text-slate-400 mb-4">Comparison of Heavy REE NdFeB vs Synthesized Alternative</p>
+        </div>
+        <div class="relative w-full h-72 flex items-center justify-center">
+          <canvas id="radarChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. HYDROMETALLURGICAL CASCADE DIGITAL TWIN -->
+    <div id="view-hydromet" class="tab-content hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h3 class="font-bold text-base text-slate-100">Solvent Extraction Cascade Digital Twin</h3>
+            <p class="text-xs text-slate-400">Real-time control parameters for Nd/Pr/Dy hydrometallurgical separation</p>
+          </div>
+
+          <button id="rlAgentBtn" onclick="toggleRLAgent()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600/30 transition flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            AI RL Optimization Agent: ON
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="space-y-4 bg-slate-950 p-4 rounded-xl border border-slate-800">
+            <h4 class="text-xs font-semibold text-slate-300 uppercase">Stage 1: Leaching & pH</h4>
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span>Solvent pH:</span>
+                <span id="val-ph" class="font-mono text-cyan-400">2.1</span>
+              </div>
+              <input type="range" id="slider-ph" min="0.5" max="4.0" step="0.1" value="2.1" oninput="updateHydromet()" class="w-full accent-cyan-500">
+            </div>
+          </div>
+
+          <div class="space-y-4 bg-slate-950 p-4 rounded-xl border border-slate-800">
+            <h4 class="text-xs font-semibold text-slate-300 uppercase">Stage 2: Reagent Dosing</h4>
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span>Dose Rate:</span>
+                <span id="val-reagent" class="font-mono text-cyan-400">14.5 L/min</span>
+              </div>
+              <input type="range" id="slider-reagent" min="5" max="30" step="0.5" value="14.5" oninput="updateHydromet()" class="w-full accent-cyan-500">
+            </div>
+          </div>
+
+          <div class="space-y-4 bg-slate-950 p-4 rounded-xl border border-slate-800">
+            <h4 class="text-xs font-semibold text-slate-300 uppercase">Stage 3: Flow Velocity</h4>
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span>Flow Rate:</span>
+                <span id="val-flow" class="font-mono text-cyan-400">42 m³/h</span>
+              </div>
+              <input type="range" id="slider-flow" min="10" max="80" step="1" value="42" oninput="updateHydromet()" class="w-full accent-cyan-500">
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Output Stats -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+            <div>
+              <span class="text-xs text-slate-400">Separation Yield (Nd/Dy)</span>
+              <div id="hydrometYield" class="text-2xl font-bold text-emerald-400 font-mono">93.4%</div>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-400">Target Benchmark</span>
+              <div class="text-xs text-slate-300 font-mono">>= 90.0%</div>
+            </div>
+          </div>
+
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+            <div>
+              <span class="text-xs text-slate-400">Toxic Effluent Waste</span>
+              <div id="hydrometWaste" class="text-2xl font-bold text-amber-400 font-mono">12.2 mg/L</div>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-400">Environmental Limit</span>
+              <div class="text-xs text-slate-300 font-mono">< 25.0 mg/L</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. E-WASTE ROBOTIC SORTING & RECYCLING VISUALIZER -->
+    <div id="view-ewaste" class="tab-content hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h3 class="font-bold text-base text-slate-100">Live Conveyor Computer Vision Sorter</h3>
+            <p class="text-xs text-slate-400">AI-driven optical & magnetic identification of end-of-life scrap items</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="toggleConveyor()" id="conveyorBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white transition">
+              Pause Conveyor
+            </button>
+          </div>
+        </div>
+
+        <!-- Canvas Belt Animation -->
+        <div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden relative">
+          <canvas id="conveyorCanvas" width="800" height="220" class="w-full h-56 block"></canvas>
+        </div>
+
+        <!-- Recovery Stats -->
+        <div class="grid grid-cols-3 gap-4 mt-4 text-center">
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span class="text-xs text-slate-400">NdFeB Recovered</span>
+            <div id="statNd" class="text-xl font-bold text-emerald-400 font-mono">142.5 kg</div>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span class="text-xs text-slate-400">Dy/Tb Purity</span>
+            <div class="text-xl font-bold text-cyan-400 font-mono">98.2%</div>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span class="text-xs text-slate-400">CV Sorting Precision</span>
+            <div class="text-xl font-bold text-indigo-400 font-mono">99.1%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. DYNAMIC SUPPLY CHAIN RISK ENGINE -->
+    <div id="view-supply" class="tab-content hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h3 class="font-bold text-base text-slate-100">Dynamic Supply Chain Allocation Engine</h3>
+            <p class="text-xs text-slate-400">Simulate geopolitical shocks and run strategic buffer reallocation</p>
+          </div>
+        </div>
+
+        <!-- Scenario Controls -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+          <button onclick="runScenario('quota')" class="p-3 text-left bg-slate-950 hover:bg-slate-800/80 border border-slate-800 rounded-xl transition group">
+            <span class="text-xs text-amber-400 font-semibold block">Scenario A</span>
+            <span class="text-sm font-medium text-slate-200 group-hover:text-emerald-400">40% Export Quota Restriction</span>
+          </button>
+          <button onclick="runScenario('embargo')" class="p-3 text-left bg-slate-950 hover:bg-slate-800/80 border border-slate-800 rounded-xl transition group">
+            <span class="text-xs text-red-400 font-semibold block">Scenario B</span>
+            <span class="text-sm font-medium text-slate-200 group-hover:text-emerald-400">Maritime Shipping Embargo</span>
+          </button>
+          <button onclick="runScenario('surge')" class="p-3 text-left bg-slate-950 hover:bg-slate-800/80 border border-slate-800 rounded-xl transition group">
+            <span class="text-xs text-cyan-400 font-semibold block">Scenario C</span>
+            <span class="text-sm font-medium text-slate-200 group-hover:text-emerald-400">EV & Wind Demand Surge (+150%)</span>
+          </button>
+        </div>
+
+        <!-- Chart Output -->
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 h-72">
+          <canvas id="supplyChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. GEMINI AI STRATEGY ADVISOR -->
+    <div id="view-gemini" class="tab-content hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col h-[600px]">
+        <div class="mb-4">
+          <h3 class="font-bold text-base text-slate-100 flex items-center gap-2">
+            ✨ Gemini AI Materials & Strategy Assistant
+          </h3>
+          <p class="text-xs text-slate-400">Ask technical domain questions regarding REE chemistry, substitution, or policy</p>
+        </div>
+
+        <!-- Pre-set Quick Prompts -->
+        <div class="flex flex-wrap gap-2 mb-4">
+          <button onclick="sendQuickPrompt('Suggest HREE-free magnet alternatives for automotive traction motors.')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition">
+            💡 HREE-Free Motor Magnets
+          </button>
+          <button onclick="sendQuickPrompt('How do we optimize pH and extractant concentration for Dysprosium separation?')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition">
+            🧪 Hydromet Dy Optimization
+          </button>
+          <button onclick="sendQuickPrompt('Provide a strategic supply chain buffer plan during an REE export quota reduction.')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition">
+            🛡️ Strategic Buffer Plan
+          </button>
+        </div>
+
+        <!-- Chat Container -->
+        <div id="chatMessages" class="flex-1 overflow-y-auto custom-scrollbar bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3 mb-4 text-xs font-mono">
+          <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 text-slate-300">
+            <span class="text-emerald-400 font-bold block mb-1">AETHER-AI ASSISTANT:</span>
+            System initialized. How can I assist with your rare earth material strategy, digital twin optimization, or recycling pipeline today?
+          </div>
+        </div>
+
+        <!-- Chat Input -->
+        <form onsubmit="handleChatSubmit(event)" class="flex gap-2">
+          <input id="chatInput" type="text" placeholder="Ask Gemini strategy advisor..." 
+                 class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
+          <button type="submit" id="sendBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl text-xs font-medium transition flex items-center gap-1">
+            Send
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // System Data & State
+    const matrixData = [
+      { name: "Neodymium (Nd)", app: "EV Traction Motors, Wind Turbines", risk: "CRITICAL", waste: "High", sub: "FeN / MnBi (In Progress)", readiness: "Medium" },
+      { name: "Dysprosium (Dy)", app: "High-Temp Permanent Magnets", risk: "VERY HIGH", waste: "Extreme", sub: "Grain Boundary Diffusion", readiness: "High" },
+      { name: "Terbium (Tb)", app: "Defense Radar, Heavy Magnets", risk: "HIGH", waste: "High", sub: "SmCo / Low-Dy NdFeB", readiness: "Medium" },
+      { name: "Samarium (Sm)", app: "Aerospace High-Temp Magnets", risk: "MODERATE", waste: "Moderate", sub: "SmFeN", readiness: "High" },
+      { name: "Iron Nitride (Fe16N2)", app: "Next-Gen REE-Free Magnet", risk: "LOW", waste: "Negligible", sub: "Direct NdFeB Replacement", readiness: "Emerging" },
+      { name: "Manganese Bismuth (MnBi)", app: "Low-Cost Industrial Motors", risk: "LOW", waste: "Low", sub: "Ferrite / NdFeB Hybrid", readiness: "Pilot" }
+    ];
+
+    let radarChartInstance = null;
+    let supplyChartInstance = null;
+    let rlAgentActive = true;
+    let conveyorRunning = true;
+    let recoveredNd = 142.5;
+
+    // View Navigation
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-emerald-500', 'text-emerald-400');
+        btn.classList.add('border-transparent', 'text-slate-400');
+      });
+      document.querySelectorAll('.tab-content').forEach(view => view.classList.add('hidden'));
+
+      document.getElementById(`tab-${tabId}`).classList.add('border-emerald-500', 'text-emerald-400');
+      document.getElementById(`tab-${tabId}`).classList.remove('border-transparent', 'text-slate-400');
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+      if(tabId === 'material' && !radarChartInstance) initRadarChart();
+      if(tabId === 'supply' && !supplyChartInstance) initSupplyChart();
+    }
+
+    // 1. Matrix Logic
+    function populateMatrix(items) {
+      const tbody = document.getElementById('matrixTable');
+      tbody.innerHTML = items.map(item => `
+        <tr class="hover:bg-slate-800/50 transition">
+          <td class="p-3 font-semibold text-slate-100">${item.name}</td>
+          <td class="p-3 text-slate-400">${item.app}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] ${item.risk.includes('CRITICAL') || item.risk.includes('VERY') ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400'}">${item.risk}</span></td>
+          <td class="p-3 text-slate-400">${item.waste}</td>
+          <td class="p-3 text-cyan-400">${item.sub}</td>
+          <td class="p-3 text-emerald-400">${item.readiness}</td>
+        </tr>
+      `).join('');
+    }
+
+    function filterMatrix() {
+      const q = document.getElementById('matrixSearch').value.toLowerCase();
+      const filtered = matrixData.filter(i => i.name.toLowerCase().includes(q) || i.app.toLowerCase().includes(q) || i.sub.toLowerCase().includes(q));
+      populateMatrix(filtered);
+    }
+
+    // 2. Material Designer Radar Chart
+    function initRadarChart() {
+      const ctx = document.getElementById('radarChart').getContext('2d');
+      radarChartInstance = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['Flux ($B_r$)', 'Coercivity ($H_{cj}$)', 'Temp Stability', 'Cost Efficiency', 'ESG/Eco Rating'],
+          datasets: [
+            {
+              label: 'Benchmark High-Dy NdFeB',
+              data: [85, 90, 75, 30, 25],
+              borderColor: '#f59e0b',
+              backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            },
+            {
+              label: 'AI Synthesized Target',
+              data: [70, 65, 80, 85, 90],
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.2)',
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: { color: '#334155' },
+              grid: { color: '#1e293b' },
+              pointLabels: { color: '#94a3b8', font: { size: 10 } },
+              ticks: { display: false, max: 100 }
+            }
+          },
+          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 11 } } } }
+        }
+      });
+      updateMagnetDesign();
+    }
+
+    function updateMagnetDesign() {
+      const flux = parseFloat(document.getElementById('slider-flux').value);
+      const coercivity = parseFloat(document.getElementById('slider-coercivity').value);
+      const temp = parseFloat(document.getElementById('slider-temp').value);
+
+      document.getElementById('val-flux').textContent = `${flux} Tesla`;
+      document.getElementById('val-coercivity').textContent = `${coercivity} kA/m`;
+      document.getElementById('val-temp').textContent = `${temp} °C`;
+
+      let alloy = "Low-Dy NdFeB (GBSD Enhanced)";
+      let desc = "Grain Boundary Diffusion alloy reduces Heavy REE usage by 60% while preserving high-temp coercivity.";
+
+      if (flux > 1.6 && coercivity < 1200) {
+        alloy = "Fe16N2 (Iron Nitride Nano-Composite)";
+        desc = "High flux density alloy using zero rare earths. Suitable for clean energy motor applications.";
+      } else if (coercivity > 2200 && temp > 220) {
+        alloy = "Sm2Co17 High-Temp Composite";
+        desc = "Extremely robust thermal stability for defense aerospace, substituting Dy with Samarium.";
+      } else if (flux < 1.0 && temp < 150) {
+        alloy = "MnBi (Manganese Bismuth Phase)";
+        desc = "Low-cost non-REE permanent magnet optimized for stationary applications and light EVs.";
+      }
+
+      document.getElementById('alloyResult').textContent = alloy;
+      document.getElementById('alloyDesc').textContent = desc;
+
+      if (radarChartInstance) {
+        radarChartInstance.data.datasets[1].data = [
+          Math.min(100, (flux / 2.0) * 100),
+          Math.min(100, (coercivity / 3000) * 100),
+          Math.min(100, (temp / 350) * 100),
+          85,
+          92
+        ];
+        radarChartInstance.update();
+      }
+    }
+
+    // 3. Hydrometallurgical Twin Logic
+    function updateHydromet() {
+      const ph = parseFloat(document.getElementById('slider-ph').value);
+      const reagent = parseFloat(document.getElementById('slider-reagent').value);
+      const flow = parseFloat(document.getElementById('slider-flow').value);
+
+      document.getElementById('val-ph').textContent = ph.toFixed(1);
+      document.getElementById('val-reagent').textContent = `${reagent.toFixed(1)} L/min`;
+      document.getElementById('val-flow').textContent = `${Math.round(flow)} m³/h`;
+
+      // Simplified physics model for separation yield & toxic effluent
+      const optimalPhDiff = Math.abs(ph - 2.3);
+      const optimalReagentDiff = Math.abs(reagent - 16.0);
+      
+      let yieldVal = 98.0 - (optimalPhDiff * 12.0) - (optimalReagentDiff * 1.5) - (Math.abs(flow - 40) * 0.2);
+      yieldVal = Math.max(45, Math.min(99.4, yieldVal));
+
+      let wasteVal = 8.0 + (reagent * 0.8) + (flow * 0.1) - (ph * 2.0);
+      wasteVal = Math.max(3.0, Math.min(45.0, wasteVal));
+
+      document.getElementById('hydrometYield').textContent = `${yieldVal.toFixed(1)}%`;
+      document.getElementById('hydrometWaste').textContent = `${wasteVal.toFixed(1)} mg/L`;
+    }
+
+    function toggleRLAgent() {
+      rlAgentActive = !rlAgentActive;
+      const btn = document.getElementById('rlAgentBtn');
+      const statusText = document.getElementById('agentStatusText');
+
+      if (rlAgentActive) {
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> AI RL Optimization Agent: ON`;
+        btn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600/30 transition flex items-center gap-2";
+        statusText.textContent = "ACTIVE";
+        statusText.className = "text-emerald-400";
+      } else {
+        btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-500"></span> AI RL Optimization Agent: OFF`;
+        btn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-400 border border-slate-700 hover:bg-slate-700 transition flex items-center gap-2";
+        statusText.textContent = "PAUSED";
+        statusText.className = "text-slate-400";
+      }
+    }
+
+    // Interval for RL Agent auto-tuning
+    setInterval(() => {
+      if (!rlAgentActive) return;
+      const phSlider = document.getElementById('slider-ph');
+      const reagentSlider = document.getElementById('slider-reagent');
+
+      // Gently step values towards optimal parameters
+      let currentPh = parseFloat(phSlider.value);
+      let currentReagent = parseFloat(reagentSlider.value);
+
+      if (currentPh < 2.3) currentPh += 0.05;
+      else if (currentPh > 2.3) currentPh -= 0.05;
+
+      if (currentReagent < 16.0) currentReagent += 0.2;
+      else if (currentReagent > 16.0) currentReagent -= 0.2;
+
+      phSlider.value = currentPh;
+      reagentSlider.value = currentReagent;
+      updateHydromet();
+    }, 1500);
+
+    // 4. E-Waste Conveyor Canvas
+    const conveyorItems = [
+      { x: 50, label: "EV Motor Stator", pure: "NdFeB (94%)", color: "#10b981" },
+      { x: 300, label: "Hard Drive Scrap", pure: "NdFeB (88%)", color: "#06b6d4" },
+      { x: 550, label: "Wind Turbine Rotor", pure: "Dy-NdFeB (98%)", color: "#f59e0b" }
+    ];
+
+    function renderConveyor() {
+      const canvas = document.getElementById('conveyorCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Belt Background
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Conveyor Tracks
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(10, 60, canvas.width - 20, 100);
+
+      // Moving Belt Lines
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 2;
+      const time = Date.now() * 0.05;
+      for (let x = (time % 30); x < canvas.width - 20; x += 30) {
+        ctx.beginPath();
+        ctx.moveTo(x + 10, 60);
+        ctx.lineTo(x + 10, 160);
+        ctx.stroke();
+      }
+
+      // Draw Scrap Items
+      conveyorItems.forEach(item => {
+        if (conveyorRunning) {
+          item.x += 1.5;
+          if (item.x > canvas.width + 50) {
+            item.x = -100;
+            recoveredNd += 2.4;
+            document.getElementById('statNd').textContent = `${recoveredNd.toFixed(1)} kg`;
+          }
+        }
+
+        // Draw Object
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(item.x, 85, 80, 50);
+
+        // Computer Vision Bounding Box
+        ctx.strokeStyle = item.color;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(item.x - 5, 80, 90, 60);
+
+        // Target Tag
+        ctx.fillStyle = item.color;
+        ctx.font = '10px monospace';
+        ctx.fillText(`[DETECTED]: ${item.label}`, item.x - 5, 75);
+        ctx.fillText(`Yield: ${item.pure}`, item.x - 5, 155);
+      });
+
+      requestAnimationFrame(renderConveyor);
+    }
+
+    function toggleConveyor() {
+      conveyorRunning = !conveyorRunning;
+      document.getElementById('conveyorBtn').textContent = conveyorRunning ? 'Pause Conveyor' : 'Resume Conveyor';
+    }
+
+    // 5. Supply Chain Engine Chart
+    function initSupplyChart() {
+      const ctx = document.getElementById('supplyChart').getContext('2d');
+      supplyChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Automotive EV', 'Defense Aerospace', 'Wind Energy', 'Consumer Tech', 'Industrial Motors'],
+          datasets: [
+            { label: 'Baseline Demand (Tons/Mo)', data: [450, 120, 310, 200, 280], backgroundColor: '#334155' },
+            { label: 'Reallocated Buffer Allocation', data: [420, 120, 290, 150, 240], backgroundColor: '#10b981' }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+            y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+          },
+          plugins: { legend: { labels: { color: '#cbd5e1' } } }
+        }
+      });
+    }
+
+    function runScenario(type) {
+      if (!supplyChartInstance) return;
+      if (type === 'quota') {
+        supplyChartInstance.data.datasets[1].data = [280, 120, 200, 90, 160];
+      } else if (type === 'embargo') {
+        supplyChartInstance.data.datasets[1].data = [150, 120, 100, 50, 110];
+      } else if (type === 'surge') {
+        supplyChartInstance.data.datasets[1].data = [650, 120, 500, 150, 310];
+      }
+      supplyChartInstance.update();
+    }
+
+    // 6. Gemini Strategy Advisor API Logic
+    async function callGemini(prompt) {
+      const apiKey = ""; // Runtime provided key
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+      const payload = {
+        contents: [{ parts: [{ text: prompt }] }],
+        systemInstruction: {
+          parts: [{ text: "You are AETHER-AI, an expert Strategic Materials, Rare Earth Chemistry, and Supply Chain Strategy Advisor. Provide concise, highly technical, and actionable guidance." }]
+        }
+      };
+
+      let delay = 1000;
+      for (let attempt = 0; attempt < 5; attempt++) {
+        try {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response text available.";
+        } catch (err) {
+          if (attempt === 4) throw err;
+          await new Promise(r => setTimeout(r, delay));
+          delay *= 2;
+        }
+      }
+    }
+
+    async function handleChatSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendChatMessage("USER", text);
+      input.value = '';
+
+      const loadingId = appendChatMessage("AETHER-AI ASSISTANT", "Analyzing technical query with Gemini 2.5 Flash...");
+
+      try {
+        const response = await callGemini(text);
+        document.getElementById(loadingId).innerText = response;
+      } catch (err) {
+        document.getElementById(loadingId).innerText = "Error establishing connection with Gemini Strategy Advisor. Please try again.";
+      }
+    }
+
+    function sendQuickPrompt(promptText) {
+      document.getElementById('chatInput').value = promptText;
+      handleChatSubmit();
+    }
+
+    function appendChatMessage(sender, text) {
+      const container = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      const msgId = 'msg-' + Date.now();
+      msgDiv.className = sender === "USER" ? "bg-slate-900 p-3 rounded-lg border border-slate-800 text-slate-200" : "bg-slate-900/80 p-3 rounded-lg border border-emerald-900/40 text-emerald-100";
+      msgDiv.innerHTML = `<span class="${sender === 'USER' ? 'text-cyan-400' : 'text-emerald-400'} font-bold block mb-1">${sender}:</span><span id="${msgId}">${escapeHtml(text)}</span>`;
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+      return msgId;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    // Window Init
+    window.onload = function() {
+      populateMatrix(matrixData);
+      renderConveyor();
+      updateHydromet();
+    };
+  </script>
+</body>
+</html>
+
